@@ -9,8 +9,10 @@ import androidx.lifecycle.viewModelScope
 import com.rengwuxian.coursecoroutines.R
 import com.rengwuxian.coursecoroutines.common.Contributor
 import com.rengwuxian.coursecoroutines.common.gitHub
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 /**
  * 标题：Android 项目里协程代码的写法
@@ -30,6 +32,13 @@ class AndroidActivity : ComponentActivity() {
         // ContinuationInterceptor
         Dispatchers.Default
         // Handler.post()
+
+        CoroutineScope(Dispatchers.Main).launch {
+            withContext(Dispatchers.IO){
+                println()
+            }
+            println()
+        }
     }
 
     class MyViewModel : ViewModel() {

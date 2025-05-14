@@ -35,6 +35,9 @@ class WithContext2Activity : ComponentActivity() {
         "data"
     }
 
+    /**
+     * withContext 和业务代码一起抽出来
+     */
     private suspend fun processData(data: String) = withContext(Dispatchers.Default) {
         // 处理数据
         "processed $data"

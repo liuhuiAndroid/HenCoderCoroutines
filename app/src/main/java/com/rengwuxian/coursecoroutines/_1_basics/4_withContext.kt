@@ -14,6 +14,7 @@ import kotlinx.coroutines.withContext
 
 /**
  * 标题：withContext()：手动切线程
+ * 作用：串行切线程
  */
 class WithContextActivity : ComponentActivity() {
     private lateinit var infoTextView: TextView

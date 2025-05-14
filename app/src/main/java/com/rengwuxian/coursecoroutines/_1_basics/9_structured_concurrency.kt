@@ -8,9 +8,7 @@ import com.rengwuxian.coursecoroutines.R
 import com.rengwuxian.coursecoroutines.common.Contributor
 import com.rengwuxian.coursecoroutines.common.gitHub
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
-import io.reactivex.rxjava3.disposables.Disposable
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
@@ -21,7 +19,8 @@ import retrofit2.Response
  */
 class StructuredConcurrencyActivity : ComponentActivity() {
     private lateinit var infoTextView: TextView
-    private var diposable: Disposable? = null
+
+    //    private var diposable: Disposable? = null
     private var job: Job? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -29,7 +28,7 @@ class StructuredConcurrencyActivity : ComponentActivity() {
         setContentView(R.layout.layout_1)
         infoTextView = findViewById(R.id.infoTextView)
 
-        // Structured concurrency
+        // Structured concurrency => 结构化并发
         // 内存泄露（泄漏） memory leak
         // GC（垃圾回收器） garbage collector
         // static
@@ -37,16 +36,16 @@ class StructuredConcurrencyActivity : ComponentActivity() {
         // Android 内存泄露 弱引用
         // RxJava
 
-//    diposable = rxStyle()
+//        diposable = rxStyle()
         job = coroutinesStyle()
         coroutinesStyle()
     }
 
     override fun onDestroy() {
         super.onDestroy()
-//    diposable?.dispose()
-//    job?.cancel()
-        lifecycleScope.cancel()
+//        diposable?.dispose()
+//        job?.cancel()
+//        lifecycleScope.cancel() => auto 不用写
     }
 
     private fun callbackStyle() {

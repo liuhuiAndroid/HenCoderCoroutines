@@ -21,6 +21,7 @@ import kotlin.coroutines.suspendCoroutine
  * 标题：连接线程世界：和回调型 API 协作
  */
 class CallbackToSuspendActivity : ComponentActivity() {
+
     private lateinit var infoTextView: TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -30,24 +31,24 @@ class CallbackToSuspendActivity : ComponentActivity() {
 
         val job = lifecycleScope.launch {
             try {
-                val contributors = callbackToCancellableSuspend()
+                val contributors = callbackToSuspend()
+//                val contributors = callbackToCancellableSuspend()
                 showContributors(contributors)
             } catch (e: Exception) {
                 infoTextView.text = e.message
             }
         }
 //
-//    lifecycleScope.launch {
-//      suspendCancellableCoroutine {
+//        lifecycleScope.launch {
+//            suspendCancellableCoroutine {
 //
-//      }
-//    }
-
-//    val job = lifecycleScope.launch {
-//      println("Coroutine cancel: 1")
-//      Thread.sleep(500)
-//      println("Coroutine cancel: 2")
-//    }
+//            }
+//        }
+//        val job = lifecycleScope.launch {
+//            println("Coroutine cancel: 1")
+//            Thread.sleep(500)
+//            println("Coroutine cancel: 2")
+//        }
 
         lifecycleScope.launch {
             delay(200)
@@ -55,56 +56,60 @@ class CallbackToSuspendActivity : ComponentActivity() {
         }
     }
 
+    /**
+     * 挂起函数版本的网络请求
+     * suspendCoroutine 将回调式函数转换为挂起函数
+     */
     private suspend fun callbackToSuspend() = suspendCoroutine {
-        gitHub.contributorsCall("square", "retrofit")
-            .enqueue(object : Callback<List<Contributor>> {
-                override fun onResponse(
-                    call: Call<List<Contributor>>, response: Response<List<Contributor>>,
-                ) {
-                    it.resume(response.body()!!)
-                }
+        gitHub.contributorsCall("square", "retrofit").enqueue(object : Callback<List<Contributor>> {
+            override fun onResponse(
+                call: Call<List<Contributor>>, response: Response<List<Contributor>>,
+            ) {
+                it.resume(response.body()!!)
+            }
 
-                override fun onFailure(call: Call<List<Contributor>>, t: Throwable) {
-                    it.resumeWithException(t)
-                }
-            })
+            override fun onFailure(call: Call<List<Contributor>>, t: Throwable) {
+                it.resumeWithException(t)
+            }
+        })
     }
 
+    /**
+     * 挂起函数可以配合协程的取消行为，但是 suspendCoroutine 不配合
+     * suspendCancellableCoroutine 支持取消
+     */
     private suspend fun callbackToCancellableSuspend() = suspendCancellableCoroutine {
         it.invokeOnCancellation {
-
+            // 执行协程取消时的收尾工作
         }
-        gitHub.contributorsCall("square", "retrofit")
-            .enqueue(object : Callback<List<Contributor>> {
-                override fun onResponse(
-                    call: Call<List<Contributor>>, response: Response<List<Contributor>>,
-                ) {
-                    it.resume(response.body()!!)
-                }
+        gitHub.contributorsCall("square", "retrofit").enqueue(object : Callback<List<Contributor>> {
+            override fun onResponse(
+                call: Call<List<Contributor>>, response: Response<List<Contributor>>,
+            ) {
+                it.resume(response.body()!!)
+            }
 
-                override fun onFailure(call: Call<List<Contributor>>, t: Throwable) {
-                    it.resumeWithException(t)
-                }
-            })
+            override fun onFailure(call: Call<List<Contributor>>, t: Throwable) {
+                it.resumeWithException(t)
+            }
+        })
     }
 
     private fun callbackStyle() {
-        gitHub.contributorsCall("square", "retrofit")
-            .enqueue(object : Callback<List<Contributor>> {
-                override fun onResponse(
-                    call: Call<List<Contributor>>, response: Response<List<Contributor>>,
-                ) {
-                    showContributors(response.body()!!)
-                }
+        gitHub.contributorsCall("square", "retrofit").enqueue(object : Callback<List<Contributor>> {
+            override fun onResponse(
+                call: Call<List<Contributor>>, response: Response<List<Contributor>>,
+            ) {
+                showContributors(response.body()!!)
+            }
 
-                override fun onFailure(call: Call<List<Contributor>>, t: Throwable) {
-                    t.printStackTrace()
-                }
-            })
+            override fun onFailure(call: Call<List<Contributor>>, t: Throwable) {
+                t.printStackTrace()
+            }
+        })
     }
 
-    private fun showContributors(contributors: List<Contributor>) = contributors
-        .map { "${it.login} (${it.contributions})" }
-        .reduce { acc, s -> "$acc\n$s" }
-        .let { infoTextView.text = it }
+    private fun showContributors(contributors: List<Contributor>) =
+        contributors.map { "${it.login} (${it.contributions})" }.reduce { acc, s -> "$acc\n$s" }
+            .let { infoTextView.text = it }
 }
