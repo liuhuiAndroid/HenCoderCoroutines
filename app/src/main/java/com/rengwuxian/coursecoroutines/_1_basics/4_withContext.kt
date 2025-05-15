@@ -24,6 +24,14 @@ class WithContextActivity : ComponentActivity() {
         setContentView(R.layout.layout_1)
         infoTextView = findViewById(R.id.infoTextView)
 
+        CoroutineScope(Dispatchers.Main).launch {
+            println("Test：1 -  ${Thread.currentThread().name}")
+            withContext(Dispatchers.IO) {
+                Thread.sleep(100)
+                println("Test：2 -  ${Thread.currentThread().name}")
+            }
+            println("Test：3 -  ${Thread.currentThread().name}")
+        }
 
         CoroutineScope(Dispatchers.Main).launch {
             val data = withContext(Dispatchers.IO) {
@@ -43,8 +51,7 @@ class WithContextActivity : ComponentActivity() {
         showContributors(contributors)
     }
 
-    private fun showContributors(contributors: List<Contributor>) = contributors
-        .map { "${it.login} (${it.contributions})" }
-        .reduce { acc, s -> "$acc\n$s" }
-        .let { infoTextView.text = it }
+    private fun showContributors(contributors: List<Contributor>) =
+        contributors.map { "${it.login} (${it.contributions})" }.reduce { acc, s -> "$acc\n$s" }
+            .let { infoTextView.text = it }
 }
