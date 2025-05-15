@@ -2,7 +2,6 @@ package com.rengwuxian.coursecoroutines._4_flow
 
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.collectIndexed
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.withIndex
@@ -12,17 +11,18 @@ import kotlin.coroutines.EmptyCoroutineContext
 
 /**
  * 标题：withIndex() 操作符
+ * 给Flow的每一个元素都编上序号
  */
 fun main() = runBlocking<Unit> {
-  val scope = CoroutineScope(EmptyCoroutineContext)
-  val flow1 = flowOf(1, 2, 3, 4, 5)
-  scope.launch {
-    flow1.withIndex().collect { (index, data) ->
-      println("1: $index - $data")
+    val scope = CoroutineScope(EmptyCoroutineContext)
+    val flow1 = flowOf(1, 2, 3, 4, 5)
+    scope.launch {
+        flow1.withIndex().collect { (index, data) ->
+            println("1: $index - $data")
+        }
+        flow1.collectIndexed { index, value ->
+            println("1: $index - $value")
+        }
     }
-    flow1.collectIndexed { index, value ->
-      println("1: $index - $value")
-    }
-  }
-  delay(10000)
+    delay(10000)
 }

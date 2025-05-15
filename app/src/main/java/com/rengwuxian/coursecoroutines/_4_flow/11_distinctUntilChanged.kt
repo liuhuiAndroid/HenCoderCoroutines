@@ -11,14 +11,17 @@ import kotlin.coroutines.EmptyCoroutineContext
 
 /**
  * 标题：distinctUntilChanged()
+ * 去重
  */
 fun main() = runBlocking<Unit> {
-  val scope = CoroutineScope(EmptyCoroutineContext)
-  val flow1 = flowOf("rengwuxian", "RengWuXian", "rengwuxian.com")
-  scope.launch {
-    flow1.distinctUntilChanged().collect { println("1: $it") } // == equals()
-    flow1.distinctUntilChanged { a, b -> a.uppercase() == b.uppercase() }.collect { println("2: $it") }
-    flow1.distinctUntilChangedBy { it.uppercase() }.collect { println("3: $it") }
-  }
-  delay(10000)
+    val scope = CoroutineScope(EmptyCoroutineContext)
+    val flow1 = flowOf("rengwuxian", "RengWuXian", "rengwuxian.com")
+    scope.launch {
+        flow1.distinctUntilChanged().collect { println("1: $it") } // == equals()
+        flow1.distinctUntilChanged { a, b -> a.uppercase() == b.uppercase() }
+            .collect { println("2: $it") }
+        flow1.distinctUntilChangedBy { it.uppercase() } // 不会修改数据本身
+            .collect { println("3: $it") }
+    }
+    delay(10000)
 }

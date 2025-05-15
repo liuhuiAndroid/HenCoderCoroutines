@@ -12,6 +12,7 @@ import kotlin.coroutines.EmptyCoroutineContext
 
 /**
  * 标题：retry() 和 retryWhen() 操作符
+ * 重启上游链条，下游是无感知的
  */
 fun main() = runBlocking<Unit> {
   val scope = CoroutineScope(EmptyCoroutineContext)

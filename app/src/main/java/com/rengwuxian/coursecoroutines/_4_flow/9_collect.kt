@@ -17,16 +17,17 @@ import kotlin.coroutines.EmptyCoroutineContext
  */
 fun main() = runBlocking<Unit> {
     val flow = flow {
-        /*launch(Dispatchers.IO) {
-          delay(2000)
-          emit(2)
-        }*/
+//        launch(Dispatchers.IO) { // 不允许切换协程调用 emit
+//            delay(2000)
+//            emit(2)
+//        }
         delay(1000)
         emit(1)
     }
+//        .flowOn(Dispatchers.IO) // 定制整体的工作协程
     val scope = CoroutineScope(EmptyCoroutineContext)
 
-    flow.onEach {
+    flow.onEach { // 更简单规整
         println("flow: $it")
     }.launchIn(scope)
 

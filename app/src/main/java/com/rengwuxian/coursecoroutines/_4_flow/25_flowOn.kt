@@ -16,6 +16,7 @@ import kotlin.coroutines.EmptyCoroutineContext
 
 /**
  * 标题：flowOn() 操作符
+ * flowOn 只对上游有效，可以用来切线程
  */
 fun main() = runBlocking<Unit> {
   val scope = CoroutineScope(EmptyCoroutineContext)
