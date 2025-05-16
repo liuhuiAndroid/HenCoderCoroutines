@@ -16,38 +16,38 @@ import kotlin.coroutines.EmptyCoroutineContext
  * 标题：MutableSharedFlow
  */
 fun main() = runBlocking<Unit> {
-  val scope = CoroutineScope(EmptyCoroutineContext)
-  val flow1 = flow {
-    emit(1)
-    delay(1000)
-    emit(2)
-    delay(1000)
-    emit(3)
-  }
-  val clickFlow = MutableSharedFlow<String>()
-  val readonlyClickFlow = clickFlow.asSharedFlow()
-  val sharedFlow = flow1.shareIn(scope, SharingStarted.WhileSubscribed(), 2)
-  scope.launch {
-    clickFlow.emit("Hello")
-    delay(1000)
-    clickFlow.emit("Hi")
-    delay(1000)
-    clickFlow.emit("你好")
-    val parent = this
-    launch {
-      delay(4000)
-      parent.cancel()
+    val scope = CoroutineScope(EmptyCoroutineContext)
+    val flow1 = flow {
+        emit(1)
+        delay(1000)
+        emit(2)
+        delay(1000)
+        emit(3)
     }
-    delay(1500)
-    sharedFlow.collect {
-      println("SharedFlow in Coroutine 1: $it")
+    val clickFlow = MutableSharedFlow<String>()
+    val readonlyClickFlow = clickFlow.asSharedFlow()
+    val sharedFlow = flow1.shareIn(scope, SharingStarted.WhileSubscribed(), 2)
+    scope.launch {
+        clickFlow.emit("Hello") // MutableSharedFlow 可以 emit：从外部发送数据
+        delay(1000)
+        clickFlow.emit("Hi")
+        delay(1000)
+        clickFlow.emit("你好")
+        val parent = this
+        launch {
+            delay(4000)
+            parent.cancel()
+        }
+        delay(1500)
+        sharedFlow.collect {
+            println("SharedFlow in Coroutine 1: $it")
+        }
     }
-  }
-  scope.launch {
-    delay(5000)
-    sharedFlow.collect {
-      println("SharedFlow in Coroutine 2: $it")
+    scope.launch {
+        delay(5000)
+        sharedFlow.collect {
+            println("SharedFlow in Coroutine 2: $it")
+        }
     }
-  }
-  delay(10000)
+    delay(10000)
 }

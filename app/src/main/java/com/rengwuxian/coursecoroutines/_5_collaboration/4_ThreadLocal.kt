@@ -12,15 +12,16 @@ val kotlinLocalString = ThreadLocal<String>()
 
 /**
  * 标题：ThreadLocal
+ * CoroutineContext 就是协程里的 ThreadLocal；协程的局部变量
  */
 fun main() = runBlocking {
-  val scope = CoroutineScope(EmptyCoroutineContext)
-  scope.launch {
-    val stringContext = kotlinLocalString.asContextElement("rengwuxian")
-    withContext(stringContext) {
-      delay(100)
-      kotlinLocalString.get()
+    val scope = CoroutineScope(EmptyCoroutineContext)
+    scope.launch {
+        val stringContext = kotlinLocalString.asContextElement("rengwuxian") // 转换成 CoroutineContext
+        withContext(stringContext) {
+            delay(100)
+            kotlinLocalString.get()
+        }
     }
-  }
-  delay(10000)
+    delay(10000)
 }

@@ -22,32 +22,32 @@ import kotlin.coroutines.EmptyCoroutineContext
  * 标题：把 Flow 对象转换成其他类型
  */
 fun main() = runBlocking<Unit> {
-  val scope = CoroutineScope(EmptyCoroutineContext)
-  val flow1 = flowOf(1, 2, 3, 4, 5)
-  val channel = flow1.produceIn(scope) // Channel produce()
-  scope.launch {
-    println("First: ${flow1.first()}")
-    println("First with condition: ${flow1.first { it > 2 }}")
-    try {
-      flowOf<Int>().first()
-    } catch (e: NoSuchElementException) {
-      println("No element")
-    }
-    println("firstOrNull(): ${flow1.firstOrNull { it > 5 }}")
-    // terminal operator
-    flow1.last()
-    flow1.lastOrNull()
-    try {
-      flow1.single()
-    } catch (e: Exception) {
+    val scope = CoroutineScope(EmptyCoroutineContext)
+    val flow1 = flowOf(1, 2, 3, 4, 5)
+    val channel = flow1.produceIn(scope) // Channel produce()
+    scope.launch {
+        println("First: ${flow1.first()}")
+        println("First with condition: ${flow1.first { it > 2 }}")
+        try {
+            flowOf<Int>().first()
+        } catch (e: NoSuchElementException) {
+            println("No element")
+        }
+        println("firstOrNull(): ${flow1.firstOrNull { it > 5 }}")
+        // terminal operator
+        flow1.last()
+        flow1.lastOrNull()
+        try {
+            flow1.single()
+        } catch (e: Exception) {
 
+        }
+        flow1.singleOrNull()
+        println("count(): ${flow1.count { it > 2 }}")
+        val list = mutableListOf<Int>()
+        println("List: ${flow1.toList(list)}")
+        flow1.toSet() // Set
+        flow1.toCollection(list)
     }
-    flow1.singleOrNull()
-    println("count(): ${flow1.count { it > 2 }}")
-    val list = mutableListOf<Int>()
-    println("List: ${flow1.toList(list)}")
-    flow1.toSet() // Set
-    flow1.toCollection(list)
-  }
-  delay(10000)
+    delay(10000)
 }

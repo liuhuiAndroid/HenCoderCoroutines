@@ -16,7 +16,7 @@ public class Java {
         try {
             waiter.wait();
             waiter.notify();
-            waiter.notifyAll();
+            waiter.notifyAll(); // 使用较麻烦，这组函数使用较少
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
