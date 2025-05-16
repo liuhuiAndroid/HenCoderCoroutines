@@ -34,7 +34,7 @@ class AndroidActivity : ComponentActivity() {
         // Handler.post()
 
         CoroutineScope(Dispatchers.Main).launch {
-            withContext(Dispatchers.IO){
+            withContext(Dispatchers.IO) {
                 println()
             }
             println()
