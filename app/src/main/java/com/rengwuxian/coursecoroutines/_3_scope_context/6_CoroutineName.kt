@@ -8,17 +8,20 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
 import kotlin.concurrent.thread
-import kotlin.coroutines.EmptyCoroutineContext
 
+/**
+ * 标题：CoroutineName
+ * 协程的名称，也可以设置给 CoroutineScope，用于测试和调试
+ */
 fun main() = runBlocking<Unit> {
-  thread {  }.name = "MyThread"
-  val name = CoroutineName("MyCoroutine")
-  val scope = CoroutineScope(Dispatchers.IO + name)
-  withContext(name) {
+    thread { }.name = "MyThread"
+    val name = CoroutineName("MyCoroutine")
+    val scope = CoroutineScope(Dispatchers.IO + name)
+    withContext(name) {
 
-  }
-  scope.launch {
-    println("CoroutineName: ${coroutineContext[CoroutineName]?.name}")
-  }
-  delay(10000)
+    }
+    scope.launch {
+        println("CoroutineName: ${coroutineContext[CoroutineName]?.name}")
+    }
+    delay(10000)
 }
