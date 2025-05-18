@@ -5,21 +5,20 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
-import kotlin.concurrent.thread
 import kotlin.coroutines.EmptyCoroutineContext
 
 fun main() = runBlocking<Unit> {
-  val scope = CoroutineScope(EmptyCoroutineContext)
-  val handler = CoroutineExceptionHandler { _, exception ->
-    println("Caught $exception")
-  }
-  scope.launch(handler) {
-    launch {
-      throw RuntimeException("Error!")
+    val scope = CoroutineScope(EmptyCoroutineContext)
+    val handler = CoroutineExceptionHandler { _, exception ->
+        println("Caught $exception")
     }
-    launch {
+    scope.launch(handler) {
+        launch {
+            throw RuntimeException("Error!")
+        }
+        launch {
 
+        }
     }
-  }
-  delay(10000)
+    delay(10000)
 }

@@ -9,33 +9,33 @@ import kotlin.coroutines.EmptyCoroutineContext
 import kotlin.system.exitProcess
 
 fun main() = runBlocking<Unit> {
-  Thread.setDefaultUncaughtExceptionHandler { t, e ->
-    println("Caught default: $e")
-    exitProcess(1)
-  }
-  /*val thread = Thread {
-    try {
-
-    } catch (e: NullPointerException) {
-
+    Thread.setDefaultUncaughtExceptionHandler { t, e ->
+        println("Caught default: $e")
+        exitProcess(1)
     }
-    throw RuntimeException("Thread error!")
-  }*/
-  /*thread.setUncaughtExceptionHandler { t, e ->
-    println("Caught $e")
-  }*/
+    /*val thread = Thread {
+      try {
+
+      } catch (e: NullPointerException) {
+
+      }
+      throw RuntimeException("Thread error!")
+    }*/
+    /*thread.setUncaughtExceptionHandler { t, e ->
+      println("Caught $e")
+    }*/
 //  thread.start()
-  val scope = CoroutineScope(EmptyCoroutineContext)
-  val handler = CoroutineExceptionHandler { _, exception ->
-    println("Caught in Coroutine: $exception")
-  }
-  scope.launch(handler) {
-    launch {
-      throw RuntimeException("Error!")
+    val scope = CoroutineScope(EmptyCoroutineContext)
+    val handler = CoroutineExceptionHandler { _, exception ->
+        println("Caught in Coroutine: $exception")
     }
-    launch {
+    scope.launch(handler) { // 最外层才可以注册 handler
+        launch {
+            throw RuntimeException("Error!")
+        }
+        launch {
 
+        }
     }
-  }
-  delay(10000)
+    delay(10000)
 }
