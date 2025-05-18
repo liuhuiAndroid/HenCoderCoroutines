@@ -12,11 +12,11 @@ import kotlin.coroutines.EmptyCoroutineContext
 
 /**
  * 标题：StateFlow
- * 特殊的 SharedFlow
+ * 特殊的 SharedFlow => value 最新一条事件的数据
  */
 fun main() = runBlocking<Unit> {
     val scope = CoroutineScope(EmptyCoroutineContext)
-    val name = MutableStateFlow("rengwuxian")
+    val name = MutableStateFlow("rengwuxian") // 参数是状态初始值
     val flow1 = flow {
         emit(1)
         delay(1000)
@@ -24,7 +24,7 @@ fun main() = runBlocking<Unit> {
         delay(1000)
         emit(3)
     }
-    val readonlyFlow = name.asStateFlow() // 转换为只读的 Flow
+    val readonlyFlow = name.asStateFlow() // => ReadonlyStateFlow 暴露给外部订阅
     val state = flow1.stateIn(scope)
     scope.launch {
         name.collect { // 订阅 StateFlow
@@ -33,7 +33,7 @@ fun main() = runBlocking<Unit> {
     }
     scope.launch {
         delay(2000)
-        name.emit("扔物线")
+        name.emit("扔物线") // 更新
     }
     delay(10000)
 }

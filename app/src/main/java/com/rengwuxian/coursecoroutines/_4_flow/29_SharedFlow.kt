@@ -42,16 +42,19 @@ fun main() = runBlocking<Unit> {
             println("flow2 - 2: $it")
         }
     }
-    // shareIn 把 flow 转换为 SharedFlow；数据源共享；数据生产的提前启动
+    // shareIn 把普通的 flow 转换为 SharedFlow；转发
+    // 转换为 SharedFlow 后多次 collect 数据源共享；发送流程和数据收集流程分开了；像 Channel
+    // 数据生产的提前启动
+    // 生产之后才收集的话会漏数据
     val sharedFlow = flow1.shareIn(scope, SharingStarted.Eagerly)
     scope.launch {
         delay(500)
-        sharedFlow.collect { // 会丢数据
+        sharedFlow.collect { // SharedFlow 会漏数据
             println("SharedFlow in Coroutine 1: $it")
         }
     }
-    // Channel: hot
-    // FLow: cold => 用于收集
+    // Channel: hot；不读取也会发送
+    // Flow: cold；collect 才会发送 => 用于收集
     // SharedFlow: cold but 生产独立 => 用于订阅
     scope.launch {
         delay(1500)
@@ -62,6 +65,9 @@ fun main() = runBlocking<Unit> {
     delay(10000)
 }
 
+/**
+ * 模拟 SharedFlow 原理
+ */
 object Ticker {
     private var time = 0
         set(value) { // Kotlin setter
