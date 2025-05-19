@@ -14,10 +14,10 @@ import kotlin.coroutines.EmptyCoroutineContext
  */
 @OptIn(ExperimentalCoroutinesApi::class)
 fun main() = runBlocking<Unit> {
-  val scope = CoroutineScope(EmptyCoroutineContext)
-  val flow1 = flowOf(1, 2, 3, 4, 5)
-  scope.launch {
-    flow1.chunked(2).collect { println("chunked: $it") }
-  }
-  delay(10000)
+    val scope = CoroutineScope(EmptyCoroutineContext)
+    val flow1 = flowOf(1, 2, 3, 4, 5)
+    scope.launch {
+        flow1.chunked(2).collect { println("chunked: $it") }
+    }
+    delay(10000)
 }
