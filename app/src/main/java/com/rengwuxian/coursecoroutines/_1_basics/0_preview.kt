@@ -13,6 +13,7 @@ import com.rengwuxian.coursecoroutines.ui.theme.CourseCoroutinesTheme
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.core.Single
 import io.reactivex.rxjava3.disposables.Disposable
+import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
@@ -27,6 +28,7 @@ import kotlin.concurrent.thread
 class PreviewActivity : ComponentActivity() {
     private val handler = Handler(Looper.getMainLooper())
 
+    @OptIn(DelicateCoroutinesApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -79,8 +81,7 @@ class PreviewActivity : ComponentActivity() {
         val single2 = gitHub.contributorsRx("square", "okhttp")
         return Single.zip(single1, single2) { contributors1, contributors2 ->
             contributors1 + contributors2
-        }.observeOn(AndroidSchedulers.mainThread())
-            .subscribe(::showContributors)
+        }.observeOn(AndroidSchedulers.mainThread()).subscribe(::showContributors)
     }
 
     private fun coroutinesStyleMerge() = lifecycleScope.launch {

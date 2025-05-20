@@ -23,9 +23,7 @@ class SuspendActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.layout_1)
         infoTextView = findViewById(R.id.infoTextView)
-
-
-//    callbackStyle()
+        callbackStyle()
         coroutinesStyle()
     }
 

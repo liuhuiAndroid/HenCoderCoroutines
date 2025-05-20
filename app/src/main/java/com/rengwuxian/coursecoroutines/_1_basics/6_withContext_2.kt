@@ -36,7 +36,7 @@ class WithContext2Activity : ComponentActivity() {
     }
 
     /**
-     * 推荐：  withContext 和业务代码一起抽出来
+     * 推荐：withContext 和业务代码一起抽出来
      */
     private suspend fun processData(data: String) = withContext(Dispatchers.Default) {
         // 处理数据
@@ -48,7 +48,8 @@ class WithContext2Activity : ComponentActivity() {
         showContributors(contributors)
     }
 
-    private suspend fun contributorsOfRetrofit() = gitHub.contributors("square", "retrofit")
+    private suspend fun contributorsOfRetrofit() =
+        gitHub.contributors("square", "retrofit")
 
     private fun showContributors(contributors: List<Contributor>) = contributors
         .map { "${it.login} (${it.contributions})" }

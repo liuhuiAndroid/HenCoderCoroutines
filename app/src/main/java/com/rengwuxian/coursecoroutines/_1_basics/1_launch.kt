@@ -39,6 +39,8 @@ class LaunchCoroutineActivity : ComponentActivity() {
 
         val context = newFixedThreadPoolContext(20, "MyThread")
         val context1 = newSingleThreadContext("MyThread")
+//        val scope = CoroutineScope(Dispatchers.IO)
+//        val scope = CoroutineScope(EmptyCoroutineContext)
         val scope = CoroutineScope(context)
         context.close()
         scope.launch {
@@ -49,6 +51,5 @@ class LaunchCoroutineActivity : ComponentActivity() {
         }
 
         // I/O: input / output 100k
-
     }
 }

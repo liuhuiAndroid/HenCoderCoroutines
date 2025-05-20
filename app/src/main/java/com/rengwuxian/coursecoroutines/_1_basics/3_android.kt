@@ -54,8 +54,7 @@ class AndroidActivity : ComponentActivity() {
         showContributors(contributors)
     }
 
-    private fun showContributors(contributors: List<Contributor>) = contributors
-        .map { "${it.login} (${it.contributions})" }
-        .reduce { acc, s -> "$acc\n$s" }
-        .let { infoTextView.text = it }
+    private fun showContributors(contributors: List<Contributor>) =
+        contributors.map { "${it.login} (${it.contributions})" }.reduce { acc, s -> "$acc\n$s" }
+            .let { infoTextView.text = it }
 }
