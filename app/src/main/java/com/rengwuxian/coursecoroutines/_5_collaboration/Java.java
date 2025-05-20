@@ -36,7 +36,7 @@ public class Java {
                 lock.unlock();
             }
         } finally {
-            lock.unlock();
+            lock.unlock(); // finally 内解锁，通用写法
         }
     }
 

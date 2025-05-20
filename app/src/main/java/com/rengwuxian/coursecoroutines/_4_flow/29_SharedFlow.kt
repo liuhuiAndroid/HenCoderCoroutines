@@ -44,7 +44,8 @@ fun main() = runBlocking<Unit> {
     }
     // shareIn 把普通的 flow 转换为 SharedFlow；转发
     // 转换为 SharedFlow 后多次 collect 数据源共享；发送流程和数据收集流程分开了；像 Channel
-    // 数据生产的提前启动
+    // 1. 希望共享数据生产流程使用 shareIn
+    // 2. 数据生产的提前启动
     // 生产之后才收集的话会漏数据
     val sharedFlow = flow1.shareIn(scope, SharingStarted.Eagerly)
     scope.launch {

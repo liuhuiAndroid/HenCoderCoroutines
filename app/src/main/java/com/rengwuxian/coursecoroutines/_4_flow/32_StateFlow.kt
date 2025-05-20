@@ -12,7 +12,7 @@ import kotlin.coroutines.EmptyCoroutineContext
 
 /**
  * 标题：StateFlow
- * 特殊的 SharedFlow => value 最新一条事件的数据
+ * 特殊的 SharedFlow => value 最新一条事件的数据；缓冲和缓存都是 1
  */
 fun main() = runBlocking<Unit> {
     val scope = CoroutineScope(EmptyCoroutineContext)

@@ -37,8 +37,8 @@ fun main() = runBlocking {
 //    println("number: $number")
 
     val scope = CoroutineScope(EmptyCoroutineContext)
-    val mutex = Mutex() // mutual exclusion 针对协程
-    val semaphore = Semaphore(3) // 协程版本的 Semaphore，定位和用法和 Java 版一样
+    val mutex = Mutex() // mutual exclusion 针对协程，推荐使用。非协程不可以使用
+    val semaphore = Semaphore(3) // 协程版本的 Semaphore，信号量，定位和用法和 Java 版一样
     AtomicInteger()
     CopyOnWriteArrayList<String>()
     val job1 = scope.launch {
